@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <link href="http://localhost:8004/StaticResourcesWeb/Application/Styles/theme_next.css" rel="stylesheet" media="screen">
+  <link href="http://localhost:8004/StaticResourcesWeb/Application/Styles/controls_next.css" rel="stylesheet" media="screen">
+  <script type="text/javascript" src="../../../.out/lib/requirejs-2.1.14/require.js"></script>
+  <script type="text/javascript" src="../../require.config.js"></script>
+
+  <style>
+
+  </style>
+
+</head>
+
+<body>
+  <div class="panel" style="margin-left:50px;">
+    <div class="grid-custommenu-container">
+    </div>
+    <div id="adGroupFilters" class="filter">
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Events</h3>
+    <div class="events" style="overflow-y:scroll; height: 200px; width:700px; border: 1px solid grey">
+    </div>
+  </div>
+  <script type="text/javascript">
+    window.BINGADS_DEBUG = true;
+    require.config({
+      'baseUrl': '../../../',
+    });
+require(['component/auto-config'], function() {
+    require(['lib/jquery', 'component/filter/view/gridFilter',
+               'component/filter/filter',
+               'component/filter/doc/i18nData',
+               'component/i18n/index', 'component/filter/doc/campaignSchema',
+               'lib/bootstrap'], function ($, GridFilter, Filter, i18nData, i18nModel, campaignSchema) {
+      window.filter = new GridFilter({
+        el: $('.grid-custommenu-container'),
+        $editorContainer: $('#adGroupFilters'),
+        entitySchema: campaignSchema,
+        filters: [{id: 10, name: 'testFilter', filter: new Filter({ConversionTrackingEnabled : true}) }],
+        i18n: new i18nModel(i18nData),
+        quickProperty : 'Name',
+        delete: function(filter, cb){
+          appendEvent('Call Delete Filter: &nbsp;&nbsp;&nbsp;' + filter.name);
+          setTimeout(function(){
+            appendEvent('Filter Deleted: &nbsp;&nbsp;&nbsp;' + filter.name);
+            cb(null, true);
+          }, 1000);
+        },
+        save: function(filter, cb){
+          appendEvent('Call Save Filter: &nbsp;&nbsp;&nbsp;' + filter.name);
+          setTimeout(function(){
+            appendEvent('Filter Saved: &nbsp;&nbsp;&nbsp;' + filter.name);
+            filter.id = _.uniqueId();
+            cb(null, filter);
+          }, 1000);
+        },
+      }).render();
+
+      window.filter.on('apply', function(filter){
+        appendEvent('Apply Filter: &nbsp;&nbsp;&nbsp;' + JSON.stringify(filter.query));
+      })
+
+      window.filter.on('expand', function(filter){
+        appendEvent('Expand');
+      })
+
+      window.filter.on('collapse', function(filter){
+        appendEvent('Collapse');
+      })
+
+      function appendEvent(text){
+        $('<p/>').html(text)
+          .prepend($('<span/>').html(new Date().toISOString() + '&nbsp;&nbsp;&nbsp;'))
+          .prependTo($('.events'));
+      }
+
+    })
+})
+  </script>
+</body>
+
+</html>

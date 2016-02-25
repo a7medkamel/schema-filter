@@ -1,0 +1,12 @@
+.dropdown(data-bind="bootstrap_dropdown:true")
+  .dropdown-control.form-control(data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+    span= i18n.get('filter_enum_selected_count')              
+    span(data-bind="text:!!values() ? values().length : 0")
+    div.glyphicon.glyphicon-triangle-bottom
+  ul.dropdown-menu.enum-options(role="menu")
+    // ko foreach: enumOptions
+    li.checkbox
+      label
+        input(type="checkbox" data-bind="value: value, checked: $parent.values")
+        span(data-bind="text:localized")        
+    // /ko

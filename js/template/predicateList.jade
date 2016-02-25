@@ -1,0 +1,28 @@
+.predicate-list
+  ul
+    // ko foreach: items 
+    li.row
+      .col-sm-3
+        select.predicate-property.form-control(data-bind="value: property, options: $root.properties, optionsValue: 'name', optionsText: 'localized'")
+      .col-sm-2 
+        // ko if: operators().length > 1
+        select.predicate-operator.form-control(data-bind="value: operator, options: operators, optionsText: 'localized', optionsValue: 'operator'")
+        // /ko
+        // ko if: operators().length === 1
+        p.operator-single(data-bind="text:operators()[0].localized")
+        // /ko
+      .col-sm-6
+        .predicate-value(data-bind="predicateValue: $data, i18n:$root.i18n")
+        // ko ifnot: validationResult().isValid
+        div
+          label.error(data-bind="text:validationResult().errors")
+        // /ko
+      .col-sm-1
+        a.remove
+          span.glyphicon.glyphicon-remove          
+          = i18n.get('filter_predicateList_remove')
+    // /ko
+  .footer
+    a.new
+      span.glyphicon.glyphicon-plus          
+      = i18n.get('filter_predicateList_new')

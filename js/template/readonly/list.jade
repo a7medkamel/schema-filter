@@ -1,0 +1,5 @@
+include predicate.jade
+- var predicates = filter.$and || filter.$or
+span.humanized
+  each predicate, index in predicates
+    +predicate(predicate, index === 0)

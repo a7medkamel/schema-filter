@@ -1,0 +1,10 @@
+mixin predicate(predicate, isFirst)
+  span.column
+    if(!isFirst)
+      span.filterand
+    = predicate.i18n.property
+  span.filter_operator= predicate.i18n.operator
+  each val, index in predicate.i18n.values
+    if(index != 0)
+      |,
+    span.filterValue= val

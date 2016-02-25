@@ -1,0 +1,12 @@
+.filter-body
+  .panel
+    .panel-heading
+      .panel-title
+        header.filter_title= i18n.get('filter_grid_header')
+    .panel-body
+      .list-placeholder
+      .save-form.form-inline
+        input.form-control.name(maxlength="100", type="text",
+          placeholder=i18n.get('filter_grid_name_watermark'), data-bind="value: newName")
+        button.filter_button.apply.btn.btn-primary= i18n.get('filter_grid_apply')
+        button.filter_button.cancel.btn.btn-default= i18n.get('filter_grid_cancel')

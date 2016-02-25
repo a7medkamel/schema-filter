@@ -1,0 +1,20 @@
+.filter-header.grid-menu(data-bind="css: {'dropdown' : filters().length > 0}")
+  .dropdown-control.filter-button(data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+    span.glyphicon.glyphicon-filter
+    button.grid-menu(title=i18n.get('filter_grid_header'))=i18n.get('filter_grid_header')
+
+  if !!showQuickFilter
+    .quick
+      input.quick-text(type="text", data-bind="value: quick, valueUpdate: 'keyup'")
+      button.quick-submit.filter_search_icon_small
+
+  .filterMenu.dropdown-menu(role="menu")
+    a.new= i18n.get("filter_grid_addnew")
+    .apply-header= i18n.get("filter_grid_applysaved")
+    ul.saved
+      // ko foreach: filters
+      li
+        a.delete(title=i18n.get('filter_grid_remove'))
+          span.glyphicon.glyphicon-remove
+        a.apply(data-bind="text: name")
+      // /ko

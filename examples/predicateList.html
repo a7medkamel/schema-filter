@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <link href="http://localhost:8004/StaticResourcesWeb/Application/Styles/theme_next.css" rel="stylesheet" media="screen">
+  <link href="http://localhost:8004/StaticResourcesWeb/Application/Styles/controls_next.css" rel="stylesheet" media="screen">
+  <script type="text/javascript" src="../../../.out/lib/requirejs-2.1.14/require.js"></script>
+  <script type="text/javascript" src="../../require.config.js"></script>
+
+</head>
+
+<body>
+  <div class="panel">
+    <div class='filter panel-body'>
+    </div>
+  </div>
+  <button id="applyFilter"> Apply </button>
+  <div class="panel selected" style="display:none">
+    <table>
+      <tr>
+        <th>Normalized JSON: </th>
+        <td id="normalized"></td>
+      </tr>
+      <tr class="filter_row_readonly">
+        <th>Humanized text: </th>
+        <td id="humanized"></td>
+      </tr>
+      <tr>
+        <th>oData V4: </th>
+        <td id="odata"></td>
+      </tr>
+      <tr>
+        <th>Legacy filter: </th>
+        <td id="legacy"></td>
+      </tr>
+    </table>
+  </div>
+  <script type="text/javascript">
+    window.BINGADS_DEBUG = true;
+    require.config({
+      'baseUrl': '../../../',
+    });
+
+require(['component/auto-config'], function() {
+    require(['lib/jquery', 'component/filter/view/predicateList', 'component/filter/doc/i18nData',
+               'component/i18n/index', '$/schema!campaign/Campaign',
+               'lib/bootstrap'], function ($, PredicateList, i18nData, i18nModel, campaignSchema) {
+      window.list = new PredicateList({
+        el: $('.filter'),
+        entitySchema: campaignSchema.$extend({
+          properties: {
+            AdGroups : {
+              filterable: true
+            },
+            Status : {
+              filterable: false
+            }
+          }
+        }),
+        i18n: new i18nModel(i18nData),
+        shortDateFormat: 'M/dd/yyyy',
+        selected: {
+          DeliveryStatus: {
+            $in: ['IOExceeded', 'AdGroupDraft']
+          }
+        }
+      }).render();
+
+      $('#applyFilter').click(function(){
+        var $panel = $('.selected'),
+          filter = window.list.getFilter();
+        $panel.show();
+        $('#normalized').text(JSON.stringify(filter.query));
+        $('#humanized').html(filter.humanizedHtml());
+        $('#odata').text(filter.odataV4());
+        $('#legacy').text(JSON.stringify(filter.legacy()));
+      });
+})
+})
+
+  </script>
+</body>
+
+</html>
